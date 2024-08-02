@@ -1,0 +1,25 @@
+{
+  "name": "node-logger",
+  "version": "1.0.0",
+  "description": "simple logger for englishdom",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yevhenlv/node-logger.git"
+  },
+  "author": "YevhenLv",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yevhenlv/node-logger/issues"
+  },
+  "homepage": "https://github.com/yevhenlv/node-logger#readme",
+  "peerDependencies": {
+    "@types/blueimp-md5": "^2.18.2",
+    "@types/node": "16.11.7",
+    "blueimp-md5": "2.19.0",
+    "typescript": "4.6.3"
+  }
+}
