@@ -2,7 +2,7 @@
   "name": "node-logger",
   "version": "1.0.0",
   "description": "simple logger for englishdom",
-  "main": "index.ts",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -17,9 +17,6 @@
   },
   "homepage": "https://github.com/yevhenlv/node-logger#readme",
   "peerDependencies": {
-    "@types/blueimp-md5": "^2.18.2",
-    "@types/node": "16.11.7",
-    "blueimp-md5": "2.19.0",
-    "typescript": "4.6.3"
+    "blueimp-md5": "2.19.0"
   }
 }

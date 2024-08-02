@@ -1,11 +1,11 @@
 // @ts-ignore
-import md5 from 'blueimp-md5/js/md5';
-import fs from 'fs';
-import {
+const md5 = require('blueimp-md5/js/md5');
+const fs  = require('fs');
+const {
   LOGGER_DATA,
   getFileServicePath,
   getFullFilePath,
-} from './data';
+} = require('@ed/logger/data');
 
 // 0 - Emergency
 // 1 - Alert
@@ -17,9 +17,9 @@ import {
 // 7 - Debug
 
 let PATH_CHECKED = false;
-let PENDING_LOGS: string[] = [];
+let PENDING_LOGS = [];
 
-export const getFilePath = () => new Promise<string>((resolve) => {
+const getFilePath = () => new Promise((resolve) => {
   const servicePath = getFileServicePath();
   const fullPath = getFullFilePath();
 
@@ -58,23 +58,23 @@ export const getFilePath = () => new Promise<string>((resolve) => {
   }
 });
 
-export const getLogData = () => ({
+const getLogData = () => ({
   log_id: LOGGER_DATA.LOG_ID,
   project: LOGGER_DATA.PROJECT_NAME,
   service_name: LOGGER_DATA.SERVICE_NAME,
   timestamp: new Date().getTime(),
 });
 
-export const getErrorLogData = (error: Error, type: 'reading' | 'writing') => ({
+const getErrorLogData = (error, type) => ({
   ...getLogData(),
   leftl: 2,
   short_message: error?.message || `Error with logs file ${type}`,
 });
 
-export const log = async (
-  level: number,
-  short_message: string,
-  x_request_id?: string,
+const log = async (
+  level,
+  short_message,
+  x_request_id,
 ) => {
   const data = `${JSON.stringify({
     ...getLogData(),
@@ -83,15 +83,15 @@ export const log = async (
     'x-request-id': x_request_id || `${LOGGER_DATA.SERVICE_NAME}_${md5(new Date().getTime())}`,
   })}\n`;
 
-  const file_path: string = await getFilePath();
+  const file_path = await getFilePath();
 
   if (file_path) {
     try {
-      const content: string = fs.readFileSync(file_path, { encoding: 'utf-8' });
+      const content = fs.readFileSync(file_path, { encoding: 'utf-8' });
       let updated = `${content}${data}`;
 
       if (PENDING_LOGS?.length) {
-        PENDING_LOGS.forEach((info: string) => {
+        PENDING_LOGS.forEach((info) => {
           updated = `${updated}${info}`;
         });
       }
@@ -101,7 +101,11 @@ export const log = async (
     } catch (error) {
       PATH_CHECKED = false;
       PENDING_LOGS.push(data);
-      PENDING_LOGS.push(`${JSON.stringify(getErrorLogData(error as Error, 'writing'))}\n`);
+      PENDING_LOGS.push(`${JSON.stringify(getErrorLogData(error, 'writing'))}\n`);
     }
   }
+};
+
+module.exports = {
+  log,
 };
