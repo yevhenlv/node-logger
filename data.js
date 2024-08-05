@@ -6,10 +6,6 @@ const LOGGER_DATA = {
   SERVICE_NAME: '',
 
   FILE_NAME: `${process.env.HOSTNAME}_application.log`,
-  FILE_PATH: path.resolve(
-    __dirname,
-    `/var/fluentbit-logs/${getProjectName()}/${getLogId()}`,
-  ),
 };
 
 const getProjectName = () => LOGGER_DATA.PROJECT_NAME;
