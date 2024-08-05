@@ -1,12 +1,8 @@
 const path = require('path');
 
-const getProjectName = () => process.env.ED_NODE_GRAPHQL_PROJECT_NAME || 'englishdom';
-
-const getLogId = () => process.env.ED_NODE_GRAPHQL_LOG_ID || 'unknown';
-
 const LOGGER_DATA = {
-  LOG_ID: process.env.ED_NODE_GRAPHQL_LOG_ID || 'unknown',
-  PROJECT_NAME: process.env.ED_NODE_GRAPHQL_PROJECT_NAME || 'englishdom',
+  LOG_ID: '',
+  PROJECT_NAME: '',
   SERVICE_NAME: '',
 
   FILE_NAME: `${process.env.HOSTNAME}_application.log`,
@@ -16,14 +12,21 @@ const LOGGER_DATA = {
   ),
 };
 
-const getFileServicePath = () => `${LOGGER_DATA.FILE_PATH}/${LOGGER_DATA.SERVICE_NAME}`;
+const getProjectName = () => LOGGER_DATA.PROJECT_NAME;
 
-const getFullFilePath = () => path.resolve(
-  `${LOGGER_DATA.FILE_PATH}/${LOGGER_DATA.SERVICE_NAME}`,
-  LOGGER_DATA.FILE_NAME,
-);
+const getLogId = () => LOGGER_DATA.LOG_ID;
+
+const getFileServicePath = () => path.resolve(
+  __dirname,
+  `/var/fluentbit-logs/${getProjectName()}/${getLogId()}/${LOGGER_DATA.SERVICE_NAME}`);
+
+const getFullFilePath = () => path.resolve(`${getFileServicePath()}`, LOGGER_DATA.FILE_NAME);
 
 const setServiceName = (SERVICE_NAME) => {
+  const parsed = SERVICE_NAME.replace(/-/g, '_').toUpperCase();
+
+  LOGGER_DATA.LOG_ID = process.env[`ED_${parsed}_LOG_ID`] || 'unknown';
+  LOGGER_DATA.PROJECT_NAME = process.env[`ED_${parsed}_PROJECT_NAME`] || 'englishdom';
   LOGGER_DATA.SERVICE_NAME = SERVICE_NAME;
 };
 
