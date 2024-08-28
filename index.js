@@ -62,7 +62,6 @@ const getLogData = () => ({
   log_id: LOGGER_DATA.LOG_ID,
   project: LOGGER_DATA.PROJECT_NAME,
   service_name: LOGGER_DATA.SERVICE_NAME,
-  timestamp: new Date().getTime(),
 });
 
 const getErrorLogData = (error, type) => ({
