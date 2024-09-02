@@ -86,16 +86,14 @@ const log = async (
 
   if (file_path) {
     try {
-      const content = fs.readFileSync(file_path, { encoding: 'utf-8' });
-      let updated = `${content}${data}`;
+      fs.appendFileSync(file_path, data, 'utf-8');
 
       if (PENDING_LOGS?.length) {
         PENDING_LOGS.forEach((info) => {
-          updated = `${updated}${info}`;
+          fs.appendFileSync(file_path, info, 'utf-8');
         });
       }
 
-      fs.writeFileSync(file_path, updated, { encoding: 'utf-8' });
       PENDING_LOGS = [];
     } catch (error) {
       PATH_CHECKED = false;
